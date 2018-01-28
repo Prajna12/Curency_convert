@@ -25,7 +25,7 @@ export default class SignUp extends React.Component {
           onChangeText={(text) => this.setState({text})}
         />
     <Button
-  onPress={() => navigate("ChatBox", {screen: "ChatBox"})}
+  onPress={() => navigate("Login", {screen: "Login"})}
   title="Register"
   color="#841584"
   
