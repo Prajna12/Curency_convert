@@ -3,7 +3,7 @@ import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView  } from 'r
 import { Container, Header, Content, Form, Item, Input } from 'native-base';
 export default class Login extends React.Component {
   static navigationOptions = {
-    title: "Login Screen"
+    title: "Login"
   }
   render() {
     const { navigate } = this.props.navigation
