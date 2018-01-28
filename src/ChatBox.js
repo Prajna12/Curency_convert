@@ -14,7 +14,7 @@ export default class ChatBox extends React.Component {
     
   }
 
-  componentWillMount () {
+  componentDidMount () {
     this.keyboardDidShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
     this.keyboardDidHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
   }
@@ -27,7 +27,7 @@ export default class ChatBox extends React.Component {
   keyboardDidShow = (event) => {
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
+      //  duration: event.duration,
         toValue: event.endCoordinates.height,
       }),
       
@@ -37,7 +37,7 @@ export default class ChatBox extends React.Component {
   keyboardDidHide = (event) => {
     Animated.parallel([
       Animated.timing(this.keyboardHeight, {
-        duration: event.duration,
+       // duration: event.duration,
         toValue: 0,
       }),
      
