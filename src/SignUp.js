@@ -3,7 +3,7 @@ import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView  } from 'r
 
 export default class SignUp extends React.Component {
   static navigationOptions = {
-    title: "Sign Up Screen"
+    title: "Sign Up"
   }
   render() {
     const { navigate } = this.props.navigation
