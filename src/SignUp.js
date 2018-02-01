@@ -2,16 +2,34 @@ import React from 'react';
 import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView  } from 'react-native';
 
 export default class SignUp extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this.state = {
+	  	isLoggedIn : false,
+	  	uname : '',
+      pass : '',
+      loading: true,
+      error: false,
+      posts: [],
+	  }
+  }
   static navigationOptions = {
     title: "Sign Up"
   }
-  state = {
-    loading: true,
-    error: false,
-    posts: [],
+  handleUsernameChange = uname => {
+  	this.setState({
+  		...this.state,
+  		uname: uname
+  	})
   }
-  
 
+  handlePasswordChange = pass => {
+  	this.setState({
+  		...this.state,
+  		pass: pass
+  	})
+  }
   render() {
     const { navigate } = this.props.navigation
     return (
@@ -19,20 +37,19 @@ export default class SignUp extends React.Component {
          <TextInput
           style={{height: 40}}
           placeholder="Username"
-          onChangeText={(text) => this.setState({text})}
-          uname={this.state.text}
+          value={this.state.uname} 
+          onChangeText={this.handleUsernameChange}
         />
          <TextInput
          style={{height: 40}}
           placeholder="Email Id"
-          onChangeText={(text) => this.setState({text})}
-          mail={this.state.text}
+          
         />
           <TextInput
          style={{height: 40}}
           placeholder="Set Password"
-          onChangeText={(text) => this.setState({text})}
-          pass={this.state.text}
+          value={this.state.pass} 
+          onChangeText={this.handlePasswordChange}
         />
     <Button
   onPress={() => navigate("Login", {screen: "Login"})}
@@ -44,32 +61,44 @@ export default class SignUp extends React.Component {
 </KeyboardAvoidingView>
     );
   }
-  componentWillMount = async () => {
-    let username = "uname"
-    let password = "pass"
+  
+ tryLogin = async (uname, pass) => {
     let signupUrl = 'https://app.alkalize14.hasura-app.io/signup'
     let requestOptions = {
-      "method": "POST",
-      "headers": {
+      method: "POST",
+      headers: {
         "Content-Type":"application/json"
-      }
+      },
+      body: 
+        JSON.stringify({
+          "username": uname,
+          "password": pass 
+        })
     };
   
-    let body = {
-      "provider":"username",
-      "data": {
-        "username": username,
-        "password": password
-      }
-    };
+    // let body = {
+    //   "provider":"username",
+    //   "data": {
+    //     "username": username,
+    //     "password": password
+    //   }
+    // };
   
-    requestOptions["body"] = JSON.stringify(body);
+    //requestOptions["body"] = JSON.stringify(body);
     console.log("Auth Response ---------------------");
     
     try {
       let resp = await fetch(signupUrl, requestOptions);
       console.log(resp);
-      return resp; 
+      if(resp.status !== 200){
+        if (resp.status === 504) {
+          Alert.alert("Network Error", "Check your internet connection" )
+        } else {
+          Alert.alert("Error", "Password too short / User already exists")      
+        }
+      } else {
+        this.setState({isLoggedIn:true})  
+      }
     }
     catch(e) {
       console.log("Request Failed: " + e);
