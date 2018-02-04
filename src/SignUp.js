@@ -1,35 +1,63 @@
 import React from 'react';
-import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView  } from 'react-native';
-
+import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView,Alert } from 'react-native';
+import {trySignup} from './ApiCall'
 export default class SignUp extends React.Component {
   
   constructor(props){
     super(props);
     this.state = {
 	  	isLoggedIn : false,
-	  	uname : '',
-      pass : '',
-      loading: true,
-      error: false,
-      posts: [],
+	  	username : ' ',
+      password : ' ',
+      email : ' ',
+      authToken:' ',
+      // loading: true,
+      // error: false,
+      // posts: [],
 	  }
   }
   static navigationOptions = {
     title: "Sign Up"
   }
-  handleUsernameChange = uname => {
-  	this.setState({
-  		...this.state,
-  		uname: uname
-  	})
-  }
+ 
 
-  handlePasswordChange = pass => {
-  	this.setState({
-  		...this.state,
-  		pass: pass
-  	})
-  }
+  handleSignupPressed = async() => {
+    
+      var url = "https://auth.animosity52.hasura-app.io/v1/signup";
+  
+      var requestOptions = {
+          "method": "POST",
+          "headers": {
+              "Content-Type": "application/json"
+          }
+      };
+      
+      var body = {
+          "provider": "username",
+          "data": {
+              "username": this.state.username,
+              "password": this.state.password,
+              //"email": "mail"
+          }
+      };
+      
+      requestOptions.body = JSON.stringify(body);
+      
+      fetch(url, requestOptions)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        if(responseJson.authToken !== null)
+          Alert.alert("Successfully registered!")
+        else
+          Alert.alert(responseJson.code);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+
+
   render() {
     const { navigate } = this.props.navigation
     return (
@@ -37,22 +65,26 @@ export default class SignUp extends React.Component {
          <TextInput
           style={{height: 40}}
           placeholder="Username"
-          value={this.state.uname} 
-          onChangeText={this.handleUsernameChange}
+         // value={this.state.uname} 
+         returnKeyLabel = {"next"} 
+         onChangeText={(text) => this.setState({username:text})}
         />
          <TextInput
          style={{height: 40}}
           placeholder="Email Id"
-          
+          value={this.state.mail} 
+          onChangeText={(text) => this.setState({email:text})}
         />
           <TextInput
          style={{height: 40}}
           placeholder="Set Password"
           value={this.state.pass} 
-          onChangeText={this.handlePasswordChange}
+          onChangeText={(text) => this.setState({password:text})}
         />
     <Button
-  onPress={() => navigate("Login", {screen: "Login"})}
+  onPress={() => { this.handleSignupPressed()
+                 navigate("Login", {screen: "Login"})
+              }}
   title="Register"
   color="#841584"
   
@@ -62,49 +94,7 @@ export default class SignUp extends React.Component {
     );
   }
   
- tryLogin = async (uname, pass) => {
-    let signupUrl = 'https://app.alkalize14.hasura-app.io/signup'
-    let requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type":"application/json"
-      },
-      body: 
-        JSON.stringify({
-          "username": uname,
-          "password": pass 
-        })
-    };
-  
-    // let body = {
-    //   "provider":"username",
-    //   "data": {
-    //     "username": username,
-    //     "password": password
-    //   }
-    // };
-  
-    //requestOptions["body"] = JSON.stringify(body);
-    console.log("Auth Response ---------------------");
-    
-    try {
-      let resp = await fetch(signupUrl, requestOptions);
-      console.log(resp);
-      if(resp.status !== 200){
-        if (resp.status === 504) {
-          Alert.alert("Network Error", "Check your internet connection" )
-        } else {
-          Alert.alert("Error", "Password too short / User already exists")      
-        }
-      } else {
-        this.setState({isLoggedIn:true})  
-      }
-    }
-    catch(e) {
-      console.log("Request Failed: " + e);
-      return networkErrorObj;
-    }
-  }
+ 
 }
 
 const styles = StyleSheet.create({
