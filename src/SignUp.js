@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View,Button,TextInput,KeyboardAvoidingView,Alert } from 'react-native';
-import {trySignup} from './ApiCall'
 export default class SignUp extends React.Component {
   
   constructor(props){
