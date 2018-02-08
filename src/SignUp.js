@@ -46,10 +46,11 @@ export default class SignUp extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        if(responseJson.authToken !== null)
-          Alert.alert("Successfully registered!")
-        else
-          Alert.alert(responseJson.code);
+        if(responseJson.code!==undefined)
+        Alert.alert("Error: "+responseJson.code);
+        else{
+        this.setState({isLoggedIn:true})
+        Alert.alert("Success")}
       })
       .catch((error) => {
         console.log(error);
@@ -82,6 +83,7 @@ export default class SignUp extends React.Component {
         />
     <Button
   onPress={() => { this.handleSignupPressed()
+    if(this.state.isLoggedIn == true) 
                  navigate("Login", {screen: "Login"})
               }}
   title="Register"
