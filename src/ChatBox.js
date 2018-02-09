@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView, Animated, Keyboard, FlatList  } from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView, Animated, Keyboard, FlatList, Alert  } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Container, Header, Content, Form, Item, Input,Footer } from 'native-base';
 export default class ChatBox extends React.Component {
@@ -14,7 +14,7 @@ export default class ChatBox extends React.Component {
       query : ' ',
       messages: [],
       resp: ' '
-    }
+    };
   }
 
   componentDidMount () {
@@ -71,26 +71,34 @@ export default class ChatBox extends React.Component {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log(responseJson);
-      this.setState({resp:responseJson.result.fulfillment.displayText});
-      console.log(responseJson.result.fulfillment.displayText)
+      this.setState({resp:responseJson.result.fulfillment.speech});
+      console.log(responseJson.result.fulfillment.speech)
+      Alert.alert(this.state.resp);
+      this.state.messages.push(this.state.query);
+     this.state.messages.push(this.state.resp);
       })
     .catch((error) => {
       console.log(error);
     });
   }
-  insertMessage = () => {
-    let msg = [{query:this.state.query, resp:this.state.resp}, ...this.state.messages]
-    this.setState({messages: msg})
-    this.state.messages.map((item, key)=>(
-      <Text key={key}> { item } </Text>)
-      )
-  }
+ 
 
   render() {
     const { navigate } = this.props.navigation;
     const { messages } = this.state;
     return (
       <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]}>
+       <View>
+       <FlatList
+  data={messages}
+  renderItem={({item}) => <Text>{item}</Text>}
+  keyExtractor={(item, index) => index}
+  extraData={this.state}
+  
+/>
+      
+       
+</View>
        <View style={{flexDirection:"row"}}>
        <TextInput
           style={{height: 40,flex:2}}
@@ -99,7 +107,7 @@ export default class ChatBox extends React.Component {
          />
      <Button
    onPress={() =>{ this.handleQuery()
-                    this.insertMessage()
+                    
                     }
                   //  navigate("ChatBox", {screen: "ChatBox"})
                 }
@@ -125,5 +133,12 @@ const styles = StyleSheet.create({
    // alignItems: 'center',
     justifyContent: 'flex-end',
     padding:10,
+  },
+  query: {
+
+    color : 'red'
+  },
+  reply: {
+    color: 'blue'
   },
 });
