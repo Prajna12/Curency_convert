@@ -21,6 +21,7 @@ export default class SignUp extends React.Component {
  
 
   handleSignupPressed = async() => {
+    const { navigate } = this.props.navigation
     
       var url = "https://auth.animosity52.hasura-app.io/v1/signup";
   
@@ -46,11 +47,14 @@ export default class SignUp extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson);
-        if(responseJson.code!==undefined)
-        Alert.alert("Error: "+responseJson.code);
+        if(responseJson.auth_token === undefined)
+        Alert.alert("Error: "+responseJson.message);
         else{
         this.setState({isLoggedIn:true})
-        Alert.alert("Success")}
+       // Alert.alert("Success")
+       navigate("Login", {screen: "Login"})
+
+      }
       })
       .catch((error) => {
         console.log(error);
@@ -82,10 +86,16 @@ export default class SignUp extends React.Component {
           onChangeText={(text) => this.setState({password:text})}
         />
     <Button
-  onPress={() => { this.handleSignupPressed()
-    if(this.state.isLoggedIn == true) 
-                 navigate("Login", {screen: "Login"})
-              }}
+  onPress={() => { 
+    {
+    this.handleSignupPressed()
+    
+    //if(this.state.isLoggedIn === true) 
+   // {
+  //    console.log("isLoggedIn: "+this.state.isLoggedIn);
+   //             
+   // }
+              }}}
   title="Register"
   color="#841584"
   
