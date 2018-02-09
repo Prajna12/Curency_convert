@@ -14,6 +14,7 @@ export default class Login extends React.Component {
     title: "Login"
   }
   handleLoginPressed = async() => {
+    const { navigate } = this.props.navigation
     
     var url = "https://auth.animosity52.hasura-app.io/v1/login";
 
@@ -39,10 +40,13 @@ export default class Login extends React.Component {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log(responseJson);
-      if(responseJson.code!==undefined)
-      Alert.alert("Error: "+responseJson.code);
+      if(responseJson.auth_token === undefined)
+      Alert.alert("Error: "+responseJson.message);
       else
-      this.setState({isLoggedIn:true})
+      {
+     // this.setState({isLoggedIn:true})
+      navigate("ChatBox", {screen: "ChatBox"})
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -66,8 +70,8 @@ export default class Login extends React.Component {
         <View  style={{paddingBottom:10}}>
         <Button
   onPress={() => { this.handleLoginPressed()
-    if(this.state.isLoggedIn == true) 
-      navigate("ChatBox", {screen: "ChatBox"})}}
+   // if(this.state.isLoggedIn == true) 
+    }}
   title="Login"
   color="#841584"
 />

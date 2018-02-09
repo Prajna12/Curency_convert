@@ -50,7 +50,7 @@ export default class SignUp extends React.Component {
         if(responseJson.auth_token === undefined)
         Alert.alert("Error: "+responseJson.message);
         else{
-        this.setState({isLoggedIn:true})
+      //  this.setState({isLoggedIn:true})
        // Alert.alert("Success")
        navigate("Login", {screen: "Login"})
 
