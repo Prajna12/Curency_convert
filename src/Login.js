@@ -16,6 +16,7 @@ export default class Login extends React.Component {
   handleLoginPressed = async() => {
     const { navigate } = this.props.navigation
     
+    
     var url = "https://auth.animosity52.hasura-app.io/v1/login";
 
     var requestOptions = {
@@ -40,12 +41,14 @@ export default class Login extends React.Component {
     .then((response) => response.json())
     .then((responseJson) => {
       console.log(responseJson);
+      
       if(responseJson.auth_token === undefined)
       Alert.alert("Error: "+responseJson.message);
       else
       {
      // this.setState({isLoggedIn:true})
-      navigate("ChatBox", {screen: "ChatBox"})
+      
+      navigate("ChatBox", {username:this.state.username})
       }
     })
     .catch((error) => {
@@ -54,6 +57,7 @@ export default class Login extends React.Component {
   }
   render() {
     const { navigate } = this.props.navigation
+    
     return (
       <KeyboardAvoidingView  style={styles.container} behavior="padding">
         

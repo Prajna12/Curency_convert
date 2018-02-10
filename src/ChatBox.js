@@ -86,12 +86,21 @@ export default class ChatBox extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const { messages } = this.state;
+    const { params } = this.props.navigation.state;
+    const username = params ? params.username : null;
+    console.log("Username : "+username);
     return (
       <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]}>
        <View>
        <FlatList
   data={messages}
-  renderItem={({item}) => <Text>{item}</Text>}
+  
+ // renderItem={({item}) => <Text>{item}</Text>}
+  renderItem ={ ({item, index}) => {
+  if (index%2 === 0) return <Text style={styles.query}>{username} : {item}</Text>
+  else  return <Text style={styles.reply}>ChatBot: {item}</Text>
+ 
+}}
   keyExtractor={(item, index) => index}
   extraData={this.state}
   
