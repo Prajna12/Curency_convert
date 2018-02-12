@@ -73,8 +73,6 @@ export default class SignUp extends React.Component {
          returnKeyLabel = {"next"} 
          onChangeText={(text) => this.setState({username:text})}
         />
-        
-       
           <TextInput
          style={{height: 40}}
           placeholder="Set Password"
