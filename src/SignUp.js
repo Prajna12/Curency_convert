@@ -73,12 +73,8 @@ export default class SignUp extends React.Component {
          returnKeyLabel = {"next"} 
          onChangeText={(text) => this.setState({username:text})}
         />
-         <TextInput
-         style={{height: 40}}
-          placeholder="Email Id"
-          value={this.state.mail} 
-          onChangeText={(text) => this.setState({email:text})}
-        />
+        
+       
           <TextInput
          style={{height: 40}}
           placeholder="Set Password"
