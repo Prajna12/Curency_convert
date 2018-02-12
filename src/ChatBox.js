@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView, Animated, Keyboard, FlatList, Alert  } from 'react-native';
+import { StyleSheet, Text, View,TextInput,Button,KeyboardAvoidingView, Animated, Keyboard, FlatList, Alert, ScrollView  } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Container, Header, Content, Form, Item, Input,Footer } from 'native-base';
 import {GiftedChat} from 'react-native-gifted-chat';
@@ -25,14 +25,14 @@ export default class ChatBox extends React.Component {
     this.setState({
       messages : [
         {
-          _id: 1,
+          _id: Math.round(Math.random() * 1000000),
           text: this.state.resp,
           createdAt: new Date(),
           user: {
             _id: 2,
-            name:this.props.navigation.state.username,
+            name: 'Bot',
+            // avatar: 'https://facebook.github.io/react/img/logo_og.png',
           },
-         
         }
       ]
     })
@@ -89,7 +89,8 @@ export default class ChatBox extends React.Component {
       console.log(responseJson);
       this.setState({resp:responseJson.result.fulfillment.speech});
       console.log(responseJson.result.fulfillment.speech)
-      Alert.alert(this.state.resp);
+     // Alert.alert(this.state.resp);
+      this.onReceive(this.state.resp);
      // this.state.messages.push(this.state.query);
      // this.state.messages.push(this.state.resp);
       })
@@ -108,6 +109,23 @@ export default class ChatBox extends React.Component {
     console.log(this.state.query);
     this.handleQuery()
     }
+    async onReceive(text) {
+     // Alert.alert(text);
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, {
+            _id: Math.round(Math.random() * 1000000),
+            text: text,
+            createdAt: new Date(),
+            user: {
+              _id: 2,
+              name: 'Bot',
+              // avatar: 'https://facebook.github.io/react/img/logo_og.png',
+            },
+          }),
+        };
+      });
+    }
 
   
   render() {
@@ -118,53 +136,30 @@ export default class ChatBox extends React.Component {
    // console.log("Username : "+username);
     return (
      
-//       <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]}>
-//        {/* <View>
-//        <FlatList
-//   data={messages}
   
-//  // renderItem={({item}) => <Text>{item}</Text>}
-//   renderItem ={ ({item, index}) => {
-//   if (index%2 === 0) return <Text style={styles.query}>{username} : {item}</Text>
-//   else  return <Text style={styles.reply}>ChatBot: {item}</Text>
- 
-// }}
-//   keyExtractor={(item, index) => index}
-//   extraData={this.state}
-  
-// />
-      
-       
-// </View> */}
-//        <View style={{flexDirection:"row"}}>
-//        {/* <TextInput
-//           style={{height: 40,flex:2}}
-//            placeholder="Type Here"
-//            onChangeText={(text) => this.setState({query:text})}
-//          />
-//      <Button
-//    onPress={() =>{ this.handleQuery()
-                    
-//                     }
-//                   //  navigate("ChatBox", {screen: "ChatBox"})
-//                 }
-//    title="Send"
-//    color="#841584"
-//    style={{flex:1}}
-//  />
-//               */}
-             
-//  </View>
 
-//     </Animated.View>
-      
+
+    
+ <Animated.View style={[styles.container, { paddingBottom: this.keyboardHeight }]}>
+ 
 <GiftedChat
 messages={this.state.messages}
 onSend={messages => this.onSend(messages)}
 //onPressActionButton={this.handleQuery()}
 placeholder = "Type your message here..."
-forceGetKeyboardHeight={true}
+showUserAvatar = {true}
+//forceGetKeyboardHeight={true}
+user = {
+          
+            {
+              _id: 1,
+              name: username,
+              // avatar: 'https://facebook.github.io/react/img/logo_og.png',
+            }
+          }
 /> 
+
+ </Animated.View>
  
     );
   }
@@ -176,8 +171,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     
    // alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding:10,
+   // justifyContent: 'flex-end',
+   // padding:10,
   },
   query: {
 
