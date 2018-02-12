@@ -36,5 +36,5 @@ Alternative way :
 The app opens!!
 
 ### Using apk
-*Download apk from here-
+*Download apk from here :
 *Install in your phone and run it.
